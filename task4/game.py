@@ -21,7 +21,6 @@ class TicTacToe:
             time.sleep(1)
         else:
             move = self.field.choose_move()
-        time.sleep(1)
         prev = self.field.board
         self.field = Board(prev[:move] + player.symbol + prev[move + 1:], move)
 
