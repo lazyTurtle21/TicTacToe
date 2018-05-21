@@ -1,6 +1,6 @@
 import random
 
-from anytree import Node
+from anytree import Node, find
 
 
 class Board:
@@ -51,8 +51,10 @@ class Board:
 
             for i in range(len(poss_moves)):
                 move = poss_moves[i]
-                p = Node(board[:move] + curr_player + board[move + 1:],
-                         parent=position, mark=None)
+                next_board = board[:move] + curr_player + board[move + 1:]
+                # TO DO: check if board is already in a tree
+                # if not find(self.root, filter_=lambda x: x.name == board):
+                p = Node(next_board, parent=position, mark=None)
                 add(p, 'X' if curr_player == 'O' else 'O', leaves)
             return leaves
 
@@ -67,9 +69,14 @@ class Board:
         for leaf in leaves:
             parent = self.find_parent(leaf).name
             if leaf.mark == 'win' + self.player:
+                if parent == leaf.name:
+                    for i in range(9):
+                        if leaf.name[i] != parent[i]:
+                            return i
                 parents[parent] += 1
             elif leaf.mark == 'win' + self.opponent:
                 parents[parent] -= 1
+
         mean = sum(parents.values()) / len(parents)  # check if all chances are
         if not all(parents[z] == mean for z in parents.keys()):  # not equal
             next_board = max(parents, key=lambda x: parents[x])
