@@ -70,6 +70,10 @@ class Board:
         for leaf in leaves:
             parent = self.tree.find_parent(leaf).element()
             if leaf.mark() == 'win' + self.player:
+                if parent == leaf.element():
+                    for i in range(9):
+                        if leaf.element()[i] != parent[i]:
+                            return i
                 parents[parent] += 1
             elif leaf.mark() == 'win' + self.opponent:
                 parents[parent] -= 1
